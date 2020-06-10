@@ -1,4 +1,4 @@
-name: mith statoc ci
+name: mith static ci
 
 on: [push, pull_request]
 
