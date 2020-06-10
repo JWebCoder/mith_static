@@ -1,10 +1,9 @@
 # Mith_Static
 
+![mith ci](https://github.com/JWebCoder/mith_static/workflows/mith%20static%20ci/badge.svg)
+[![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/mith_static/mod.ts)
+
 Serve static files under [Mith framework](https://github.com/JWebCoder/mith)
-
-## Deno documentation
-
-[doc.deno.land/mith_static](https://doc.deno.land/https/deno.land/x/mith_static/mod.ts)
 
 ## Usage
 
