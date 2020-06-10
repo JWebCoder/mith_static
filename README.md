@@ -1,4 +1,4 @@
-# Mith_Static
+# Mith_static
 
 ![mith ci](https://github.com/JWebCoder/mith_static/workflows/mith%20static%20ci/badge.svg)
 [![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/mith_static/mod.ts)
