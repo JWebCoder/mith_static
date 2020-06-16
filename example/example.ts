@@ -20,7 +20,7 @@ app.use((req, res, next) => {
   next()
 })
 app.error(
-  (req: Request, res: Response, next: NextFunction) => {
+  (req, res, next: NextFunction) => {
     if (res.error) {
       res.status = res.error.status || 500
       res.body = res.error.message
