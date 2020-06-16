@@ -7,7 +7,7 @@
 import { readFileStrSync } from "https://deno.land/std@0.57.0/fs/read_file_str.ts"
 import { sep, normalize, extname } from "https://deno.land/std@0.57.0/path/mod.ts"
 import { contentType } from "https://deno.land/x/media_types@v2.3.5/mod.ts"
-import { IRequest, IResponse } from 'https://deno.land/x/mith@v0.8.1/mod.ts'
+import { IRequest, IResponse, NextFunction, Middleware } from 'https://deno.land/x/mith@v0.8.3/mod.ts'
 import debug from 'https://deno.land/x/debuglog/debug.ts'
 let logger = debug('static')
 
@@ -58,15 +58,7 @@ export interface options {
  * @public
  */
 
-export function serveStatic<
-RequestT extends Req = any,
-ResponseT extends IResponse = any,
-MiddlewareT extends (
-  request: RequestT,
-  response: ResponseT,
-  next: (...args: any) => any,
-) => any = any,
-> (root: string, endpoint: string, options: options = {}) {
+export function serveStatic(root: string, endpoint: string, options: options = {}): Middleware {
   const {
     fallthrough = true,
     immutable = false,
@@ -84,7 +76,7 @@ MiddlewareT extends (
     throw new TypeError('root path must be a string')
   }
   
-  return (async (req, res, next) => {
+  return async (req: IRequest, res: IResponse, next: NextFunction) => {
     logger('running')
     logger(req.serverRequest.url)
     if (req.serverRequest.url.indexOf(endpoint) !== 0) {
@@ -156,5 +148,5 @@ MiddlewareT extends (
     req.requestHandled = true
     logger('sending file')
     res.sendResponse()
-  }) as MiddlewareT
+  }
 }
