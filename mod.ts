@@ -7,11 +7,15 @@
 import { readFileStrSync } from "https://deno.land/std@0.57.0/fs/read_file_str.ts"
 import { sep, normalize, extname } from "https://deno.land/std@0.57.0/path/mod.ts"
 import { contentType } from "https://deno.land/x/media_types@v2.3.5/mod.ts"
-import { Middleware, Response, Request, NextFunction } from 'https://deno.land/x/mith@v0.8.0/mod.ts'
+import { IRequest, IResponse } from 'https://deno.land/x/mith@v0.8.1/mod.ts'
 import debug from 'https://deno.land/x/debuglog/debug.ts'
 let logger = debug('static')
 
 const UP_PATH_REGEXP = /(?:^|[\\/])\.\.(?:[\\/]|$)/;
+
+interface Req extends IRequest {
+  requestHandled: boolean
+}
 
 function isHidden(path: string) {
   const pathArr = path.split(sep)
@@ -55,10 +59,14 @@ export interface options {
  */
 
 export function serveStatic<
-  Req extends Request,
-  Res extends Response,
-  Next extends NextFunction
-> (root: string, endpoint: string, options: options = {}): Middleware<Req, Res, Next> {
+RequestT extends Req = any,
+ResponseT extends IResponse = any,
+MiddlewareT extends (
+  request: RequestT,
+  response: ResponseT,
+  next: (...args: any) => any,
+) => any = any,
+> (root: string, endpoint: string, options: options = {}) {
   const {
     fallthrough = true,
     immutable = false,
@@ -76,7 +84,7 @@ export function serveStatic<
     throw new TypeError('root path must be a string')
   }
   
-  return async (req: Request, res: Response, next: NextFunction) => {
+  return (async (req, res, next) => {
     logger('running')
     logger(req.serverRequest.url)
     if (req.serverRequest.url.indexOf(endpoint) !== 0) {
@@ -148,5 +156,5 @@ export function serveStatic<
     req.requestHandled = true
     logger('sending file')
     res.sendResponse()
-  }
+  }) as MiddlewareT
 }
