@@ -1,7 +1,6 @@
 import {
   assert,
   assertEquals,
-  assertStrictEq,
 } from "https://deno.land/std@v0.56.0/testing/asserts.ts"
 
 Deno.env.set('staticPath', Deno.cwd() + '/example')
