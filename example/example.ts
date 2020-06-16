@@ -1,5 +1,4 @@
 import {
-  debug,
   Mith,
   serveStatic,
   resolve,
@@ -29,7 +28,5 @@ app.error(
     next()
   }
 )
-
-const PORT = Number(env.get('PORT')) || 8000
 
 export default app

@@ -4,10 +4,10 @@
  * MIT Licensed
  */
 
-import { readFileStrSync } from "https://deno.land/std@0.56.0/fs/read_file_str.ts"
-import { sep, normalize, extname } from "https://deno.land/std@0.56.0/path/mod.ts"
+import { readFileStrSync } from "https://deno.land/std@0.57.0/fs/read_file_str.ts"
+import { sep, normalize, extname } from "https://deno.land/std@0.57.0/path/mod.ts"
 import { contentType } from "https://deno.land/x/media_types@v2.3.5/mod.ts"
-import { Middleware, Response, Request, NextFunction } from 'https://deno.land/x/mith@v0.7.0/mod.ts'
+import { Middleware, Response, Request, NextFunction } from 'https://deno.land/x/mith@v0.8.0/mod.ts'
 import debug from 'https://deno.land/x/debuglog/debug.ts'
 let logger = debug('static')
 
@@ -92,7 +92,7 @@ export function serveStatic<
       res.status = 405
       res.headers.set('Allow', 'GET, HEAD')
       res.headers.set('Content-Length', '0')
-      res.send()
+      res.sendResponse()
       return
     }
 
@@ -147,6 +147,6 @@ export function serveStatic<
     res.body = readFileStrSync(path, { encoding: "utf8" })
     req.requestHandled = true
     logger('sending file')
-    res.send()
+    res.sendResponse()
   }
 }
