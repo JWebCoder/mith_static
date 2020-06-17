@@ -7,15 +7,11 @@
 import { readFileStrSync } from "https://deno.land/std@0.57.0/fs/read_file_str.ts"
 import { sep, normalize, extname } from "https://deno.land/std@0.57.0/path/mod.ts"
 import { contentType } from "https://deno.land/x/media_types@v2.3.5/mod.ts"
-import { IRequest, IResponse, NextFunction, Middleware } from 'https://deno.land/x/mith@v0.8.3/mod.ts'
+import { NextFunction } from 'https://deno.land/x/mith@v0.8.4/mod.ts'
 import debug from 'https://deno.land/x/debuglog/debug.ts'
 let logger = debug('static')
 
 const UP_PATH_REGEXP = /(?:^|[\\/])\.\.(?:[\\/]|$)/;
-
-interface Req extends IRequest {
-  requestHandled: boolean
-}
 
 function isHidden(path: string) {
   const pathArr = path.split(sep)
@@ -58,7 +54,7 @@ export interface options {
  * @public
  */
 
-export function serveStatic(root: string, endpoint: string, options: options = {}): Middleware {
+export function serveStatic(root: string, endpoint: string, options: options = {}) {
   const {
     fallthrough = true,
     immutable = false,
@@ -76,7 +72,7 @@ export function serveStatic(root: string, endpoint: string, options: options = {
     throw new TypeError('root path must be a string')
   }
   
-  return async (req: IRequest, res: IResponse, next: NextFunction) => {
+  return async (req: any, res: any, next: NextFunction) => {
     logger('running')
     logger(req.serverRequest.url)
     if (req.serverRequest.url.indexOf(endpoint) !== 0) {
