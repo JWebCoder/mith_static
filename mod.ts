@@ -4,14 +4,23 @@
  * MIT Licensed
  */
 
-import { readFileStrSync } from "https://deno.land/std@0.57.0/fs/read_file_str.ts"
-import { sep, normalize, extname } from "https://deno.land/std@0.57.0/path/mod.ts"
-import { contentType } from "https://deno.land/x/media_types@v2.3.5/mod.ts"
-import { NextFunction } from 'https://deno.land/x/mith@v0.8.4/mod.ts'
+import { sep, normalize, extname } from "https://deno.land/std@0.63.0/path/mod.ts"
+import { contentType } from "https://deno.land/x/media_types@v2.4.3/mod.ts"
+import { NextFunction } from 'https://deno.land/x/mith@v0.9.3/mod.ts'
 import debug from 'https://raw.githubusercontent.com/rista404/deno-debug/75400f612c8051b1f57ecc5c037df9138507592a/debug.ts'
 let logger = debug('static')
 
 const UP_PATH_REGEXP = /(?:^|[\\/])\.\.(?:[\\/]|$)/;
+
+interface ReadOptions {
+  encoding?: string;
+}
+
+
+function readFileStrSync(filename: string, opts: ReadOptions) {
+  const decoder = new TextDecoder(opts.encoding);
+  return decoder.decode(Deno.readFileSync(filename));
+}
 
 function isHidden(path: string) {
   const pathArr = path.split(sep)
