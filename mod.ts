@@ -8,7 +8,7 @@ import { readFileStrSync } from "https://deno.land/std@0.57.0/fs/read_file_str.t
 import { sep, normalize, extname } from "https://deno.land/std@0.57.0/path/mod.ts"
 import { contentType } from "https://deno.land/x/media_types@v2.3.5/mod.ts"
 import { NextFunction } from 'https://deno.land/x/mith@v0.8.4/mod.ts'
-import debug from 'https://deno.land/x/debuglog/debug.ts'
+import debug from 'https://raw.githubusercontent.com/rista404/deno-debug/75400f612c8051b1f57ecc5c037df9138507592a/debug.ts'
 let logger = debug('static')
 
 const UP_PATH_REGEXP = /(?:^|[\\/])\.\.(?:[\\/]|$)/;
