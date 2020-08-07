@@ -1,7 +1,7 @@
 import {
   assert,
   assertEquals,
-} from "https://deno.land/std@v0.56.0/testing/asserts.ts"
+} from "https://deno.land/std@v0.63.0/testing/asserts.ts"
 
 Deno.env.set('staticPath', Deno.cwd() + '/example')
 
