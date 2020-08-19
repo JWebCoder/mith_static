@@ -2,8 +2,6 @@ import {
   Mith,
   serveStatic,
   resolve,
-  Request,
-  Response,
   NextFunction
 } from './deps.ts'
 

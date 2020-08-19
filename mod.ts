@@ -4,9 +4,9 @@
  * MIT Licensed
  */
 
-import { sep, normalize, extname } from "https://deno.land/std@0.63.0/path/mod.ts"
-import { contentType } from "https://deno.land/x/media_types@v2.4.3/mod.ts"
-import { NextFunction } from 'https://deno.land/x/mith@v0.9.3/mod.ts'
+import { sep, normalize, extname } from "https://deno.land/std@0.65.0/path/mod.ts"
+import { contentType } from "https://deno.land/x/media_types@v2.4.5/mod.ts"
+import { NextFunction, IResponse } from 'https://deno.land/x/mith@v0.9.6/mod.ts'
 import debug from 'https://raw.githubusercontent.com/rista404/deno-debug/75400f612c8051b1f57ecc5c037df9138507592a/debug.ts'
 let logger = debug('static')
 
@@ -81,7 +81,7 @@ export function serveStatic(root: string, endpoint: string, options: options = {
     throw new TypeError('root path must be a string')
   }
   
-  return async (req: any, res: any, next: NextFunction) => {
+  return async (req: any, res: IResponse, next: NextFunction) => {
     logger('running')
     logger(req.serverRequest.url)
     if (req.serverRequest.url.indexOf(endpoint) !== 0) {
@@ -149,9 +149,15 @@ export function serveStatic(root: string, endpoint: string, options: options = {
       res.headers.set("Cache-Control", directives.join(","));
     }
    
-    res.body = readFileStrSync(path, { encoding: "utf8" })
+    res.body = await Deno.open(path, { read: true })
     req.requestHandled = true
     logger('sending file')
-    res.sendResponse()
+    res.sendResponse().finally(
+      () => {
+        if (res.body.rid) {
+          Deno.close(res.body.rid)
+        }
+      }
+    )
   }
 }
